@@ -11,6 +11,10 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
+const getCurrentTime = () => {
+  const date = new Date();
+  return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+}
 
 function extractQueryString() {
   var params = {};
@@ -32,13 +36,14 @@ function extractQueryString() {
 function autofill (formInputs, reasonInputs) {
   var urlParams = extractQueryString();
 
-  var formInputTypes = ["text", "number"];
+  var formInputTypes = ["text", "number", "time"];
   formInputs.forEach((input) => {
     if (formInputTypes.indexOf(input.type) > -1) {
+      console.log(input.name);
       if (input.name in urlParams) {
         input.value = urlParams[input.name];
       } else if (input.name == "heuresortie") {
-        input.value = getCurrentTime()
+        input.value = getCurrentTime();
       }
     }
 
@@ -59,10 +64,15 @@ function autofill (formInputs, reasonInputs) {
   });
 }
 
+function autogen(formInputs) {
+  $("#generate-btn").click();
+}
+
 function gofill() {
 	const formInputs = $$('#form-profile input')
 	const reasonInputs = [...$$('input[name="field-reason"]')]
 	autofill(formInputs, reasonInputs)
+	autogen();
 }
 
 (function() { 
